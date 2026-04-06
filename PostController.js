@@ -1,10 +1,11 @@
 import Post from "./Post.js";
+import PostService from './PostService.js'
 
 class PostController { 
-    async create(req, res) { 
+     async create(req, res) { 
         try {
-            const { author, title, img } = req.body
-            const post = await Post.create({ author, title, img })
+            const post = await PostService.create(req.body)
+            
             res.status(200).json({ message: "cool", post })  
         } catch(error) { 
             console.log(error)
@@ -14,7 +15,7 @@ class PostController {
 
     async getAll(req, res) { 
         try {
-            const posts = await Post.find()
+            const posts = await PostService.getAll()
             res.json(posts)
         } catch (e) { 
             console.log(e)
@@ -24,15 +25,16 @@ class PostController {
 
     async getOne(req, res) { 
         try {
-            const { id } = req.params
-            const post = await Post.findById(id)
             
-            if (!post) {  
+            const onePost = await PostService.getOne(req.params.id)
+
+            if (!onePost) {  
                 return res.status(404).json({ error: 'Пост не найден' })
             }
             
-            res.json(post)
-            console.log('getOne: ' + post)
+            res.json(onePost)
+            console.log('getOne: ' + onePost)
+
         } catch (e) { 
             console.log(e)
             res.status(500).json({ error: e.message })
@@ -41,28 +43,8 @@ class PostController {
 
     async updatePost(req, res) { 
         try {
-            const { id } = req.params
-            const updateData = req.body 
-            
-            if (!updateData || Object.keys(updateData).length === 0) {
-                return res.status(400).json({ error: 'Нет данных для обновления' })
-            }
-            
-            const updatedPost = await Post.findByIdAndUpdate(
-                id, 
-                updateData, 
-                { new: true }
-            )
-            
-            if (!updatedPost) {
-                return res.status(404).json({ error: 'Пост не найден' })
-            }
-            
-            console.log('update!!', updatedPost)
-            res.status(200).json({
-                message: 'Пост успешно обновлён',
-                post: updatedPost 
-            })
+            const post = await PostService.updatePost(req.params.id, req.body)
+            res.json(post)
         } catch(e) { 
             console.log(e)
             res.status(500).json({ error: e.message })
@@ -71,20 +53,8 @@ class PostController {
 
     async deletePost(req, res) { 
         try {
-            const { id } = req.params
-            
-            if (!id) { 
-                res.status(404).json({ sms: 'id not found' })
-            }
-            const posts = await Post.findByIdAndDelete(id)
-            if (!posts) {
-                console.log({ e: 'yet del' })
-                  res.status(404).json({ sms: 'post not found' })
-            } else { 
-                   console.log('!!!--- posts' + posts)
-            return res.json(posts)
-            }
-         
+            const post = await PostService.deletePost(req.body)
+            res.json(post)
             
         } catch (e) { 
             console.log(e)
