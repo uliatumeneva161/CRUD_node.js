@@ -2,8 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import router from './router.js'
 import {funcModule} from './file_module.js';
+import { navigation } from './Navigation.js'
 
 funcModule()
+navigation()
 const DB_URL = 'mongodb+srv://julia2:julia2@new-julia.a8mlkvs.mongodb.net/?appName=new-julia';
 const app = express();
 const port = 3000;
