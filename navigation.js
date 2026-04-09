@@ -17,8 +17,12 @@ export const navigation=()=>{
 
     // Middleware
     app.use(express.json());
-    app.use(express.urlencoded({ extended: true }));
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.urlencoded({ extended: true })); // Когда пользователь отправляет форму, 
+    // браузер кодирует данные особым способом.express.urlencoded()
+    // расшифровывает их, чтобы вы могли получить req.body.name
+    
+    app.use(express.static(path.join(__dirname, 'public'))); //если в папке public лежит style.css, 
+    //то файл будет доступен по адресу http://localhost:3000/style.css
 
     // Данные для страниц
     const pages = {
