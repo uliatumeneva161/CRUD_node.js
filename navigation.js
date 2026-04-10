@@ -5,9 +5,6 @@ import { fileURLToPath } from 'url';
 export const navigation=()=>{ 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-    console.log('dirname ' + __dirname)
-    console.log('IMU ' + import.meta.url)
-    console.log('DN '+ fileURLToPath(import.meta.url))
     const app = express();
     const PORT = 3000;
 
@@ -37,13 +34,32 @@ export const navigation=()=>{
             res.render('page', { 
                 title: page.title, 
                 heading: page.heading,
-                path: req.path 
+                path: req.path,
+                jul: "Julia"
             });
         } else {
             res.status(404).render('404', { title: '404' });
         }
     });
 
+app.get('/form', (req, res) => {
+     res.render('form', { 
+        name: '', 
+        email: '', 
+        age: '',
+        isSubmit: false 
+    });
+});
+
+app.post('/form', (req, res) => {
+    res.render('form', { 
+        name: req.body.username,
+        email: req.body.email,
+        age: req.body.age,
+        isSubmit: true 
+    });
+});
+    
     app.listen(PORT, () => {
         console.log(`Сервер запущен: http://localhost:${PORT}`);
     });

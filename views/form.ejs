@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+</head>
+<body>
+    <h1>Форма регистрации</h1>
+    
+    <form method="POST" action="/form">
+        <div>
+            <label>Имя:</label>
+            <input type="text" name="username" required>
+        </div>
+        
+        <div>
+            <label>Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        
+        <div>
+            <label>Возраст:</label>
+            <input type="number" name="age">
+        </div>
+        
+        <button type="submit">Отправить</button>
+    </form>
+    <% if(isSubmit){ %>
+        <h1>Данные получены!</h1>
+        <p>Имя: <%= name %></p>
+        <p>Email: <%= email %></p>
+        <p>Возраст: <%= age %></p>
+     <%  } %>
+  
+</body>
+</html>
