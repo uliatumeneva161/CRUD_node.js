@@ -2,37 +2,73 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-
-
+  const filePath = fileURLToPath(import.meta.url)
+const thatFolderPath = path.dirname(filePath)
+    const newFolderPath = path.join(thatFolderPath, 'new-folder')
+      const newFilePath = path.join(newFolderPath, 'new-file.json')
 function initDatabase() {
     try {
-        const filePath = fileURLToPath(import.meta.url)
-        const thatFolderPath = path.dirname(filePath)
-        const newFolderPath = path.join(thatFolderPath, 'new-folder')
+      
         if (!fs.existsSync(newFolderPath)) {
             fs.mkdirSync(newFolderPath, { recursive: true })
-             console.log('folder создана')
+            //  console.log('folder создана')
         } else {
-            console.log('folder уже есть')
+            // console.log('folder уже есть')
         }
         
-        const newFilePath = path.join(newFolderPath, 'new-file')
+  
 
         if (!fs.existsSync(newFilePath)) {
             
-            fs.writeFileSync(newFilePath, '{}')
-            console.log('nice file')
+            fs.writeFileSync(newFilePath, '[]')
+            // console.log('nice file')
         } else {
-            console.log('file уже есть')
+            // console.log('file уже есть')
         }
             
          
     } catch(e) {
         console.log('bad', e)
     }
+    return newFolderPath, newFilePath
 }
+function addUser(user) { 
+    const dateNow = Date.now()
+    const newDate = new Date(dateNow)
+    const editUser = {
+        ...user,
+        id: dateNow,
+        createdAt: newDate.toLocaleString('ru-RU')
+    }
+    const read = fs.readFileSync(newFilePath, 'utf-8')
+    const parseFile = JSON.parse(read)
+    parseFile.push(editUser)
+    fs.writeFileSync(newFilePath, JSON.stringify(parseFile))
+    return editUser
+}
+function getAll() { 
+    if (!fs.existsSync(newFilePath)) {
+        return [];
+    }
+    const readFile = fs.readFileSync(newFilePath, 'utf-8')
+    // const parseFile = JSON.parse(readFile)
+    return JSON.parse(readFile)
+}
+function getU(id) {
+    const users = getAll()
+    const userId = users.find(u => u.id === id)
 
-export { initDatabase };
+    if (userId) {
+        return userId
+    } else { 
+        throw new Error('not found u id')
+    }
+}
+function updateU(id) { 
+    const users = getAll()
+    
+}
+export { initDatabase, addUser, getAll, getU, updateU};
 // TODO: Реализуй следующие функции (все СИНХРОННЫЕ):
 
 // 1. initDatabase() 
